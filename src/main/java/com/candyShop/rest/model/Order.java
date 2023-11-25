@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -31,6 +32,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
+
     public Order() {
     }
 

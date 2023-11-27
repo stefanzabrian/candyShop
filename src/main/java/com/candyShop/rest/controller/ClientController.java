@@ -32,7 +32,7 @@ public class ClientController {
 
         List<Client> clients = clientService.getAll();
 
-        return ResponseEntity.status(HttpStatus.OK).body(clients);
+        return ResponseEntity.ok(clients);
     }
 
 

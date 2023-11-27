@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CandyService {
-    Optional<Candy> findByFirstName(String name);
+    Optional<Candy> findByName(String name);
 
     Candy create(
             String name,

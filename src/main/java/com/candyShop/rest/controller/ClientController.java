@@ -60,7 +60,7 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("First name already exists");
         }
         // add int id in case it passes the try bock
-        Integer clientAfterCreationId = null;
+        Integer clientAfterCreatedId = null;
         // catch exceptions from service
         try {
             // attempt to Create the client
@@ -69,8 +69,8 @@ public class ClientController {
                     client.getLastName(),
                     client.getAddress()
             );
-            //save client's id in variable clientAfterCreationId
-            clientAfterCreationId = clientAfterCreation.getId();
+            //save client's id in variable clientAfterCreatedId
+            clientAfterCreatedId = clientAfterCreation.getId();
 
         } catch (IllegalArgumentException e) {
             // throw e.getMessage
@@ -80,10 +80,10 @@ public class ClientController {
         }
         // Return the created user as a new DTO if no catch
         DTOClient dtoClient = new DTOClient(
-                clientService.findById(clientAfterCreationId).get().getId(),
-                clientService.findById(clientAfterCreationId).get().getFirstName(),
-                clientService.findById(clientAfterCreationId).get().getLastName(),
-                clientService.findById(clientAfterCreationId).get().getAddress()
+                clientService.findById(clientAfterCreatedId).get().getId(),
+                clientService.findById(clientAfterCreatedId).get().getFirstName(),
+                clientService.findById(clientAfterCreatedId).get().getLastName(),
+                clientService.findById(clientAfterCreatedId).get().getAddress()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(dtoClient);
     }

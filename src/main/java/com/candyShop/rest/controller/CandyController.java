@@ -1,5 +1,6 @@
 package com.candyShop.rest.controller;
 
+import com.candyShop.rest.controller.dto.DTOCandy;
 import com.candyShop.rest.controller.exception.ResourceNotFoundException;
 import com.candyShop.rest.model.Candy;
 import com.candyShop.rest.service.CandyService;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -48,5 +50,40 @@ public class CandyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Candy with deleted with id: " + id);
+    }
+
+    @PostMapping("/candy/create")
+    public ResponseEntity<?> create(
+            @Valid
+            @RequestBody
+            DTOCandy candy) {
+        // Request body from post mapping
+        // Validate input data, unique name.
+        if (candyService.findByName(candy.getName()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name already exist: " + candy.getName());
+        }
+        // add int id in case it passes the try bock
+        Integer candyAfterCreatedId = null;
+        // catch exceptions from service
+        try {
+            Candy candyAfterCreation = candyService.create(
+                    candy.getName(),
+                    candy.getPrice(),
+                    candy.getDescription()
+            );
+            //save client's id in variable clientAfterCreatedId
+            candyAfterCreatedId = candyAfterCreation.getId();
+        } catch (IllegalArgumentException e) {
+            // throw e.getMessage
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        // Return the created user as a new DTO if no catch
+        DTOCandy dtoCandy = new DTOCandy(
+                candyService.findById(candyAfterCreatedId).get().getId(),
+                candyService.findById(candyAfterCreatedId).get().getName(),
+                candyService.findById(candyAfterCreatedId).get().getPrice(),
+                candyService.findById(candyAfterCreatedId).get().getDescription()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(dtoCandy);
     }
 }

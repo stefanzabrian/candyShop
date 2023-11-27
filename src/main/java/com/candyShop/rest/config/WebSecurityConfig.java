@@ -23,6 +23,8 @@ public class WebSecurityConfig {
                 )
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers(
+                                "/api/allCandies",
+                                "/api/candy/**",
                                 "/api/allClients",
                                 "/api/client/**",
                                 "/",

@@ -21,7 +21,7 @@ public class CandyServiceImpl implements CandyService {
     }
 
     @Override
-    public Optional<Candy> findByFirstName(String name) {
+    public Optional<Candy> findByName(String name) {
         return candyRepository.findByName(name);
     }
 

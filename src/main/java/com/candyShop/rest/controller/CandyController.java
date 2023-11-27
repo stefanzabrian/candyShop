@@ -86,4 +86,39 @@ public class CandyController {
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(dtoCandy);
     }
+    @PutMapping("/candy/{id}")
+    public ResponseEntity<?> update(
+            @PathVariable(value = "id") int id,
+            @Valid @RequestBody DTOCandy candy
+    ) {
+        // Request body from post mapping
+        // Validate input data, id must exist
+        if(candyService.findById(id).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Candy not found id: " + id);
+        }
+        // add int id in case it passes the try bock
+        Integer candyAfterUpdateId = null;
+        // catch exceptions from service
+        try {
+            // attempt to Update the candy
+            Candy candyAfterUpdate = candyService.update(
+                    id,
+                    candy.getName(),
+                    candy.getPrice(),
+                    candy.getDescription()
+            );
+            candyAfterUpdateId = candyAfterUpdate.getId();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e){
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        DTOCandy dtoCandy = new DTOCandy(
+                candyService.findById(candyAfterUpdateId).get().getId(),
+                candyService.findById(candyAfterUpdateId).get().getName(),
+                candyService.findById(candyAfterUpdateId).get().getPrice(),
+                candyService.findById(candyAfterUpdateId).get().getDescription()
+        );
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dtoCandy);
+    }
 }

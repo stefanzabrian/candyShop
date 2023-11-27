@@ -9,18 +9,21 @@ import java.util.Optional;
 public interface ClientService {
     Optional<Client> findByFirstName(String firstName);
 
-    Client create(String firstName,
-                  String lastName,
-                  String address);
+    Client create(
+            String firstName,
+            String lastName,
+            String address
+    );
 
     List<Client> getAll();
 
     Optional<Client> findById(int id);
 
-    Client update(int id,
-                  String firstName,
-                  String lastName,
-                  String address
+    Client update(
+            int id,
+            String firstName,
+            String lastName,
+            String address
     ) throws ResourceNotFoundException;
 
     void delete(int id) throws ResourceNotFoundException;

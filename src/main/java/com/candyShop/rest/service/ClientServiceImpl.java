@@ -62,6 +62,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client update(int id, String firstName, String lastName, String address) throws ResourceNotFoundException {
+        // Validate if id exists in DB
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         // Validate input parameters
@@ -71,14 +72,14 @@ public class ClientServiceImpl implements ClientService {
         if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || StringUtils.isBlank(address)) {
             throw new IllegalArgumentException("first name, last name, and address cannot be empty");
         }
-
+        // modify client
         client.setFirstName(firstName);
         client.setLastName(lastName);
         client.setAddress(address);
 
 
         try {
-            // Save the user to the database
+            // Save the modified client to the database
             return clientRepository.save(client);
         } catch (Exception e) {
             // Handle other exceptions (database issues, etc.)
@@ -90,7 +91,6 @@ public class ClientServiceImpl implements ClientService {
     public void delete(int id) throws ResourceNotFoundException {
         clientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-
         clientRepository.deleteById(id);
     }
 }

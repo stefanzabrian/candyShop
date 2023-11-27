@@ -22,9 +22,13 @@ public class OrderCandy {
     private Integer candyPrice;
     @ManyToOne
     @JoinColumn(name = "candy_id")
+    @NotNull(message = "Must not null")
+    @NotBlank(message = "Must not blank")
     private Candy candy;
     @ManyToOne
     @JoinColumn(name = "orders_id")
+    @NotNull(message = "Must not null")
+    @NotBlank(message = "Must not blank")
     private Order order;
 
     public OrderCandy() {

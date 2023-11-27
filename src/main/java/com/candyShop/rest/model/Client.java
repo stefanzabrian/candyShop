@@ -6,13 +6,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "user_profile")
-public class UserProfile {
+@Table(name = "client")
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "first_name")
+    @Column(name = "first_name", unique = true)
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
     private String firstName;
@@ -20,22 +20,19 @@ public class UserProfile {
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
     private String lastName;
-    @Column(name = "phone_number")
-    @NotNull(message = "Must not null")
-    @NotBlank(message = "Must not blank")
-    private Integer phoneNumber;
-    @Column(name = "address")
+    @Column(name = "address", columnDefinition = "TEXT")
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
     private String address;
 
-    public UserProfile() {
+
+
+    public Client() {
     }
 
-    public UserProfile(String firstName, String lastName, Integer phoneNumber, String address) {
+    public Client(String firstName, String lastName, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
         this.address = address;
     }
 
@@ -51,24 +48,16 @@ public class UserProfile {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String first_name) {
+        this.firstName = first_name;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Integer getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(Integer phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
     }
 
     public String getAddress() {

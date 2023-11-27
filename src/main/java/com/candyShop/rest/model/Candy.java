@@ -12,7 +12,7 @@ public class Candy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "TEXT")
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
     private String name;
@@ -20,7 +20,7 @@ public class Candy {
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
     private Integer price;
-    @Column(name = "descpription")
+    @Column(name = "description", columnDefinition = "LONGTEXT")
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
     private String description;

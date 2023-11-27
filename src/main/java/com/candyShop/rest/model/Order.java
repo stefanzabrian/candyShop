@@ -30,8 +30,8 @@ public class Order {
     private Integer totalPrice;
 
     @ManyToOne
-    @JoinColumn(name = "user_profile_id")
-    private UserProfile userProfile;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     public Order() {
     }
@@ -41,14 +41,6 @@ public class Order {
         this.dateOfOrder = dateOfOrder;
         this.orderStatus = orderStatus;
         this.totalPrice = totalPrice;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getNumber() {
@@ -83,11 +75,11 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public UserProfile getUserProfile() {
-        return userProfile;
+    public Client getClient() {
+        return client;
     }
 
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

@@ -3,6 +3,7 @@ package com.candyShop.rest.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
@@ -22,6 +23,8 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable
                 )
                 .authorizeRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/allCandies").permitAll()
                         .requestMatchers(
                                 "/api/allCandies",
                                 "/api/candy/**",
@@ -38,6 +41,7 @@ public class WebSecurityConfig {
                                 "/vendor/**"
                         )
                         .permitAll()
+                        .requestMatchers("/api/candy/create").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(withDefaults())

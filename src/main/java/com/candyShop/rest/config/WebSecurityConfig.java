@@ -1,6 +1,5 @@
 package com.candyShop.rest.config;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -17,16 +16,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
 
 
 @Configuration
 @EnableWebSecurity
-@EnableWebMvc
 public class WebSecurityConfig {
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -40,9 +36,10 @@ public class WebSecurityConfig {
                 .authorizeRequests(authorize ->
                         authorize
                                 .requestMatchers(
-                                        "/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/candy").hasAuthority("ADMIN")
-
+                                        "/login")
+                                .permitAll()
+                                .requestMatchers( "/**")
+                                .permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(withDefaults())

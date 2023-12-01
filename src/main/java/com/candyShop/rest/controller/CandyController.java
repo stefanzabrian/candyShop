@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-@CrossOrigin
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class CandyController {
     private final CandyService candyService;
 

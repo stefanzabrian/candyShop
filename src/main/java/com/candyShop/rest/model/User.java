@@ -2,7 +2,6 @@ package com.candyShop.rest.model;
 
 import com.candyShop.rest.model.constant.UserRole;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

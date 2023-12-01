@@ -40,11 +40,8 @@ public class WebSecurityConfig {
                 .authorizeRequests(authorize ->
                         authorize
                                 .requestMatchers(
-                                        "/api/allClients",
-                                        "/api/allCandies",
-                                        "/api/**",
-                                        "/api/candy/**",
                                         "/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/candy").hasAuthority("ADMIN")
 
                                 .anyRequest().authenticated()
                 )

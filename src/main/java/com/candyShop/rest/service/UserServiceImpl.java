@@ -1,0 +1,84 @@
+package com.candyShop.rest.service;
+
+import com.candyShop.rest.controller.exception.ResourceNotFoundException;
+import com.candyShop.rest.model.User;
+import com.candyShop.rest.model.constant.UserRole;
+import com.candyShop.rest.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public void delete(int id) throws ResourceNotFoundException {
+        if (userRepository.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException("user not found id :" + id);
+        }
+        userRepository.delete(userRepository.findById(id).get());
+    }
+
+    @Override
+    public User create(String email, String password, UserRole role) {
+        User user = new User
+                (
+                        email,
+                        passwordEncoder.encode(password),
+                        UserRole.ADMIN
+
+                );
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User update(int id, String email, String password) throws ResourceNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("user not found id: " + id));
+        user.setId(id);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
+        return new org.springframework.security.core.userdetails.User
+                (
+                        user.getEmail(),
+                        user.getPassword(),
+                        List.of(new SimpleGrantedAuthority(user.getRole().name()))
+                );
+    }
+}

@@ -10,15 +10,21 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
     Optional<User> findByEmail(String email);
+
     List<User> getAll();
+
     Optional<User> findById(int id);
+
     void delete(int id) throws ResourceNotFoundException;
+
     User create(
             String email,
             String password,
             UserRole role
     );
+
     User update(
+            int id,
             String email,
             String password
     ) throws ResourceNotFoundException;

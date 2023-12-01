@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
 @CrossOrigin
 @RestController
 @RequestMapping("/api")
@@ -23,7 +22,7 @@ public class CandyController {
         this.candyService = candyService;
     }
 
-    @GetMapping("/allCandies")
+    @GetMapping("/candy")
     public ResponseEntity<?> getAll() {
         if (candyService.getAll().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No content");
@@ -52,7 +51,7 @@ public class CandyController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Candy with deleted with id: " + id);
     }
 
-    @PostMapping("/candy/create")
+    @PostMapping("/candy")
     public ResponseEntity<?> create(
             @Valid
             @RequestBody

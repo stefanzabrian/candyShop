@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import java.util.List;
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class CandyController {
     private final CandyService candyService;
 
@@ -22,6 +21,7 @@ public class CandyController {
         this.candyService = candyService;
     }
 
+    @CrossOrigin
     @GetMapping("/candy")
     public ResponseEntity<?> getAll() {
         if (candyService.getAll().isEmpty()) {
@@ -92,7 +92,7 @@ public class CandyController {
     ) {
         // Request body from post mapping
         // Validate input data, id must exist
-        if(candyService.findById(id).isEmpty()) {
+        if (candyService.findById(id).isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Candy not found id: " + id);
         }
         // add int id in case it passes the try bock
@@ -109,7 +109,7 @@ public class CandyController {
             candyAfterUpdateId = candyAfterUpdate.getId();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         DTOCandy dtoCandy = new DTOCandy(

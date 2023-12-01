@@ -16,12 +16,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
 
 
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 public class WebSecurityConfig {
 
     @Bean
@@ -38,7 +40,7 @@ public class WebSecurityConfig {
                                 .requestMatchers(
                                         "/login")
                                 .permitAll()
-                                .requestMatchers( "/**")
+                                .requestMatchers("/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -51,12 +53,20 @@ public class WebSecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://locahost:3000");
+        config.setAllowCredentials(false);
+        config.addAllowedOrigin("*");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
-                HttpHeaders.ACCEPT
+                HttpHeaders.ACCEPT,
+                HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+                HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS,
+                HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS,
+                HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS,
+                HttpHeaders.FROM,
+                HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD,
+                HttpHeaders.CONNECTION,
+                HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS
         ));
         config.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),

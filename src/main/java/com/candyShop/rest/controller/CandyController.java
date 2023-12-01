@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class CandyController {
@@ -21,7 +22,6 @@ public class CandyController {
         this.candyService = candyService;
     }
 
-    @CrossOrigin
     @GetMapping("/candy")
     public ResponseEntity<?> getAll() {
         if (candyService.getAll().isEmpty()) {
@@ -85,6 +85,7 @@ public class CandyController {
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(dtoCandy);
     }
+
     @PutMapping("/candy/{id}")
     public ResponseEntity<?> update(
             @PathVariable(value = "id") int id,

@@ -2,6 +2,7 @@ package com.candyShop.rest.model;
 
 import com.candyShop.rest.model.constant.UserRole;
 import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -19,9 +20,11 @@ public class User {
     @NotBlank
     @Email
     private String email;
+    @Column(name = "password")
     @NotNull
     @NotBlank
     private String password;
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

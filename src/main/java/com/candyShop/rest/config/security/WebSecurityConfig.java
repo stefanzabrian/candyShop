@@ -1,8 +1,12 @@
 package com.candyShop.rest.config.security;
 
+import com.candyShop.rest.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
@@ -25,10 +29,11 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableWebMvc
 public class WebSecurityConfig {
+    private UserService userService;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Autowired
+    public WebSecurityConfig(UserService userService) {
+        this.userService = userService;
     }
 
     @Bean
@@ -38,7 +43,7 @@ public class WebSecurityConfig {
                 .authorizeRequests(authorize ->
                         authorize
                                 .requestMatchers("/login").permitAll()
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers(HttpMethod.GET).authenticated()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(withDefaults())
@@ -67,6 +72,16 @@ public class WebSecurityConfig {
         config.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+    }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+    AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 }

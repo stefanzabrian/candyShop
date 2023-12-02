@@ -1,4 +1,4 @@
-package com.candyShop.rest.config;
+package com.candyShop.rest.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,11 +37,8 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize ->
                         authorize
-                                .requestMatchers(
-                                        "/login")
-                                .permitAll()
-                                .requestMatchers("/**")
-                                .permitAll()
+                                .requestMatchers("/login").permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(withDefaults())

@@ -1,6 +1,5 @@
 package com.candyShop.rest.config.security;
 
-import com.candyShop.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,12 +28,6 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableWebMvc
 public class WebSecurityConfig {
-   /* private UserService userService;
-
-    @Autowired
-    public WebSecurityConfig(UserService userService) {
-        this.userService = userService;
-    }*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -73,6 +66,7 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -80,7 +74,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-    AuthenticationConfiguration authenticationConfiguration) throws Exception {
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

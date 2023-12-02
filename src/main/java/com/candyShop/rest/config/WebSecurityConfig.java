@@ -58,15 +58,7 @@ public class WebSecurityConfig {
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
-                HttpHeaders.ACCEPT,
-                HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
-                HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS,
-                HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS,
-                HttpHeaders.ACCESS_CONTROL_REQUEST_HEADERS,
-                HttpHeaders.FROM,
-                HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD,
-                HttpHeaders.CONNECTION,
-                HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS
+                HttpHeaders.ACCEPT
         ));
         config.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),

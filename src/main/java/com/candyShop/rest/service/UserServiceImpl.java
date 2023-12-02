@@ -1,18 +1,22 @@
 package com.candyShop.rest.service;
 
 import com.candyShop.rest.controller.exception.ResourceNotFoundException;
+import com.candyShop.rest.model.Role;
 import com.candyShop.rest.model.User;
 import com.candyShop.rest.model.constant.UserRole;
 import com.candyShop.rest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -78,7 +82,10 @@ public class UserServiceImpl implements UserService {
                 (
                         user.getEmail(),
                         user.getPassword(),
-                        List.of(new SimpleGrantedAuthority(user.getRole().name()))
+                        mapRolesToAuthorities(user.getRoles())
                 );
+    }
+    private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
+        return roles.stream().map( role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 }

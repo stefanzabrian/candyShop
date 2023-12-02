@@ -17,11 +17,7 @@ public interface UserService extends UserDetailsService {
 
     void delete(int id) throws ResourceNotFoundException;
 
-    User create(
-            String email,
-            String password,
-            UserRole role
-    );
+    User create(User user);
 
     User update(
             int id,

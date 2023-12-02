@@ -3,7 +3,7 @@ package com.candyShop.rest.service;
 import com.candyShop.rest.controller.exception.ResourceNotFoundException;
 import com.candyShop.rest.model.Role;
 import com.candyShop.rest.model.User;
-import com.candyShop.rest.model.constant.UserRole;
+import com.candyShop.rest.repository.RoleRepository;
 import com.candyShop.rest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,11 +22,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -53,14 +56,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(String email, String password, UserRole role) {
+    public User create(User newUser) {
         User user = new User
                 (
-                        email,
-                        passwordEncoder.encode(password),
-                        UserRole.ADMIN
-
+                        newUser.getEmail(),
+                        passwordEncoder.encode(newUser.getPassword())
                 );
+        user.setRoles(newUser.getRoles());
+
         return userRepository.save(user);
     }
 
@@ -85,7 +88,8 @@ public class UserServiceImpl implements UserService {
                         mapRolesToAuthorities(user.getRoles())
                 );
     }
+
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
-        return roles.stream().map( role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 }

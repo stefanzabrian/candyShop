@@ -29,12 +29,12 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableWebMvc
 public class WebSecurityConfig {
-    private UserService userService;
+   /* private UserService userService;
 
     @Autowired
     public WebSecurityConfig(UserService userService) {
         this.userService = userService;
-    }
+    }*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,11 +42,10 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize ->
                         authorize
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers(HttpMethod.GET).authenticated()
+                                .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/auth/register/moderator").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(withDefaults())
                 .httpBasic(withDefaults());
         return http.build();
     }

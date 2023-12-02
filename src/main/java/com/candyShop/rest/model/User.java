@@ -25,9 +25,6 @@ public class User {
     @NotNull
     @NotBlank
     private String password;
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -36,10 +33,9 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, UserRole role) {
+    public User(String email, String password) {
         this.email = email;
         this.password = password;
-        this.role = role;
     }
 
     public List<Role> getRoles() {
@@ -74,11 +70,4 @@ public class User {
         this.password = password;
     }
 
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
 }

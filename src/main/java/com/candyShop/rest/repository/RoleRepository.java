@@ -1,2 +1,10 @@
-package com.candyShop.rest.repository;public interface RoleRepository {
+package com.candyShop.rest.repository;
+
+import com.candyShop.rest.model.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+    Optional<Role> findByName(String name);
 }

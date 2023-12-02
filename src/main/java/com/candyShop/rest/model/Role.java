@@ -3,8 +3,8 @@ package com.candyShop.rest.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "roles")
-public class Roles {
+@Table(name = "role")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -12,10 +12,10 @@ public class Roles {
     @Column(name = "name")
     private String name;
 
-    public Roles() {
+    public Role() {
     }
 
-    public Roles(String name) {
+    public Role(String name) {
         this.name = name;
     }
 

@@ -1,5 +1,6 @@
 package com.candyShop.rest.controller;
 
+import com.candyShop.rest.controller.dto.LoginDto;
 import com.candyShop.rest.controller.dto.RegisterDto;
 import com.candyShop.rest.model.Role;
 import com.candyShop.rest.model.User;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +36,18 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
         this.roleRepository = roleRepository;
         this.userService = userService;
+    }
+    @PostMapping("login")
+    public ResponseEntity<String> login(
+            @RequestBody LoginDto loginDto
+    ) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getEmail(),
+                        loginDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return new ResponseEntity<>("User signed success!", HttpStatus.OK);
+
     }
 
     @PostMapping("register")

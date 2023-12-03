@@ -1,5 +1,7 @@
 package com.candyShop.rest.controller;
 
+import com.candyShop.rest.config.security.JWTGenerator;
+import com.candyShop.rest.controller.dto.AuthResponseDto;
 import com.candyShop.rest.controller.dto.LoginDto;
 import com.candyShop.rest.controller.dto.RegisterDto;
 import com.candyShop.rest.model.Role;
@@ -27,18 +29,23 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
     private final UserService userService;
+    private final JWTGenerator jwtGenerator;
 
 
     @Autowired
     public AuthController(
             AuthenticationManager authenticationManager,
-            RoleRepository roleRepository, UserService userService) {
+            RoleRepository roleRepository,
+            UserService userService,
+            JWTGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
         this.roleRepository = roleRepository;
         this.userService = userService;
+        this.jwtGenerator = jwtGenerator;
     }
+
     @PostMapping("login")
-    public ResponseEntity<String> login(
+    public ResponseEntity<AuthResponseDto> login(
             @RequestBody LoginDto loginDto
     ) {
         Authentication authentication = authenticationManager.authenticate(
@@ -46,7 +53,8 @@ public class AuthController {
                         loginDto.getEmail(),
                         loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed success!", HttpStatus.OK);
+        String token = jwtGenerator.generateToken(authentication);
+        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
 
     }
 
@@ -68,6 +76,7 @@ public class AuthController {
 
         return new ResponseEntity<>("User registered success!", HttpStatus.OK);
     }
+
     @PostMapping("register/moderator")
     public ResponseEntity<String> registerModerator(
             @RequestBody RegisterDto registerDto) {
@@ -86,6 +95,7 @@ public class AuthController {
 
         return new ResponseEntity<>("Moderator registered success!", HttpStatus.OK);
     }
+
     @PostMapping("register/admin")
     public ResponseEntity<String> registerAdmin(
             @RequestBody RegisterDto registerDto) {

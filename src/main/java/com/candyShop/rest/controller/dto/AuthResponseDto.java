@@ -2,7 +2,7 @@ package com.candyShop.rest.controller.dto;
 
 public class AuthResponseDto {
     private String accessToken;
-    private String tokenType;
+    private String tokenType = "Bearer ";
 
     public AuthResponseDto() {
     }

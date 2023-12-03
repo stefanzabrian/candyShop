@@ -17,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -31,6 +32,9 @@ import java.util.Arrays;
 public class WebSecurityConfig {
     @Autowired
     private JwtAuthEntryPoint authEntryPoint;
+    @Bean JWTAuthenticationFilter jwtAuthenticationFilter() {
+        return new JWTAuthenticationFilter();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,9 +48,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/candy/**").permitAll()
                                 .anyRequest().authenticated()
 
-                )
-                .formLogin(withDefaults())
-                .httpBasic(withDefaults());
+                );
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

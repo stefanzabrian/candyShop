@@ -2,7 +2,6 @@ package com.candyShop.rest.service;
 
 import com.candyShop.rest.controller.exception.ResourceNotFoundException;
 import com.candyShop.rest.model.User;
-import com.candyShop.rest.model.constant.UserRole;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;

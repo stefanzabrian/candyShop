@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -28,6 +29,8 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableWebMvc
 public class WebSecurityConfig {
+    @Autowired
+    private JwtAuthEntryPoint authEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,8 +41,11 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/auth/login").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
                                 .requestMatchers("/api/auth/register/moderator").permitAll()
+                                .requestMatchers("/api/candy/**").permitAll()
                                 .anyRequest().authenticated()
+
                 )
+                .formLogin(withDefaults())
                 .httpBasic(withDefaults());
         return http.build();
     }

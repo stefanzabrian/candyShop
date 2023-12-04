@@ -1,9 +1,9 @@
 package com.candyShop.rest.config.security;
 
+import com.candyShop.rest.controller.exception.JwtValidationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public class JWTGenerator {
             Jwts.parser().setSigningKey(SecurityConstants.JWT_SECRET).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+            throw new JwtValidationException("JWT was expired or incorrect");
         }
     }
 }

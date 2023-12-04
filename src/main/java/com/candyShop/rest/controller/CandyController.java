@@ -51,6 +51,10 @@ public class CandyController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Candy with deleted with id: " + id);
     }
 
+    // mapping POST Candy
+    // RequestBody & validate input,
+    // catch exceptions & execute database if all good
+    // ResponseEntity with status and msg.
     @PostMapping("/candy")
     public ResponseEntity<?> create(
             @Valid
@@ -86,6 +90,10 @@ public class CandyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dtoCandy);
     }
 
+    // mapping PUT Candy
+    // RequestBody & validate input,
+    // catch exceptions & execute database if all good
+    // ResponseEntity with status and msg.
     @PutMapping("/candy/{id}")
     public ResponseEntity<?> update(
             @PathVariable(value = "id") int id,
@@ -107,8 +115,10 @@ public class CandyController {
                     candy.getPrice(),
                     candy.getDescription()
             );
+            // save candy's id in variable candyAfterUpdateId
             candyAfterUpdateId = candyAfterUpdate.getId();
         } catch (ResourceNotFoundException e) {
+            // throw e.getMessage
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

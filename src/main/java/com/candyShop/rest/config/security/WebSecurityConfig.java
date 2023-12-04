@@ -49,6 +49,7 @@ public class WebSecurityConfig {
 
                 );
         http
+                .oauth2Login(withDefaults())
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class );
         return http.build();
     }

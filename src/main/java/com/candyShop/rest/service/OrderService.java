@@ -3,7 +3,6 @@ package com.candyShop.rest.service;
 import com.candyShop.rest.model.Candy;
 import com.candyShop.rest.model.Order;
 import com.candyShop.rest.model.constant.OrderStatus;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +17,7 @@ public interface OrderService {
             OrderStatus orderStatus,
             int totalPrice
     );
-    
+
     List<Order> getAll();
     Optional<Order> findByClient(int id);
     Candy update(int id,

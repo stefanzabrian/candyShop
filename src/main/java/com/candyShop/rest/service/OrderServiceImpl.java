@@ -82,4 +82,15 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Error updating the order");
         }
     }
+
+    @Override
+    public void delete(int id) throws ResourceNotFoundException {
+        orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found id: " + id));
+        try {
+            orderRepository.deleteById(id);
+        } catch (Exception e ) {
+            throw new RuntimeException("Error deleting the order");
+        }
+    }
 }

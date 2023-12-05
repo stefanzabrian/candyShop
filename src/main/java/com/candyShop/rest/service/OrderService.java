@@ -25,4 +25,5 @@ public interface OrderService {
                  Date dateOfOrder,
                  OrderStatus orderStatus,
                  int totalPrice) throws ResourceNotFoundException;
+    void delete(int id) throws ResourceNotFoundException;
 }

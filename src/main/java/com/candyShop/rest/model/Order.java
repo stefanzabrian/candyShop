@@ -43,6 +43,14 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getNumber() {
         return number;
     }

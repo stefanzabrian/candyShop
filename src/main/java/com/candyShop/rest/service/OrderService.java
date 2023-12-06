@@ -10,20 +10,20 @@ import java.util.Optional;
 
 
 public interface OrderService {
-    Optional<Order> findById(int id) throws ResourceNotFoundException;
+    Optional<Order> findById(Integer id) throws ResourceNotFoundException;
     Order create(
-            int number,
+            Integer number,
             Date dateOfOrder,
             OrderStatus orderStatus,
-            int totalPrice
+            Integer totalPrice
     );
 
     List<Order> getAll();
-    Optional<Order> findByClient(int id);
-    Order update(int id,
-                 int number,
+    Optional<Order> findByClientId(Integer id);
+    Order update(Integer id,
+                 Integer number,
                  Date dateOfOrder,
                  OrderStatus orderStatus,
-                 int totalPrice) throws ResourceNotFoundException;
+                 Integer totalPrice) throws ResourceNotFoundException;
     void delete(int id) throws ResourceNotFoundException;
 }

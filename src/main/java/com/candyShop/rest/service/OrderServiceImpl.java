@@ -21,14 +21,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> findById(int id) throws ResourceNotFoundException {
+    public Optional<Order> findById(Integer id) throws ResourceNotFoundException {
         return orderRepository.findById(id);
 
     }
 
     @Override
-    public Order create(int number, Date dateOfOrder, OrderStatus orderStatus, int totalPrice) {
-        if (number == 0 || dateOfOrder == null || orderStatus == null || totalPrice == 0) {
+    public Order create(Integer number, Date dateOfOrder, OrderStatus orderStatus, Integer totalPrice) {
+        if (number == null || dateOfOrder == null || orderStatus == null || totalPrice == null) {
             throw new IllegalArgumentException("number, date of order, order status and total price must not null");
         }
 
@@ -52,22 +52,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> findByClient(int id) {
-        return orderRepository.findByClient(id);
+    public Optional<Order> findByClientId(Integer id) {
+        return orderRepository.findByClientId(id);
     }
 
     @Override
     public Order update(
-            int id,
-            int number,
+            Integer id,
+            Integer number,
             Date dateOfOrder,
             OrderStatus orderStatus,
-            int totalPrice
+            Integer totalPrice
     ) throws ResourceNotFoundException {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found id: " + id));
 
-        if (number == 0 || dateOfOrder == null || orderStatus == null || totalPrice == 0) {
+        if (number == null || dateOfOrder == null || orderStatus == null || totalPrice == null) {
             throw new IllegalArgumentException("number, date of order, order status and total price must not null");
         }
 

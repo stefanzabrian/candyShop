@@ -28,12 +28,20 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableWebMvc
-public class WebSecurityConfig {
-
+public class SecurityConfig {
     @Bean
-    public JWTAuthenticationFilter jwtAuthenticationFilter() {
-        return new JWTAuthenticationFilter();
+    public SecurityFilterChain securedSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers("/api/client").authenticated()
+                                .requestMatchers("/api/auth/register/moderator").authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+
     }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,7 +53,6 @@ public class WebSecurityConfig {
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
-                                .requestMatchers("/api/auth/register/moderator").permitAll()
                                 .requestMatchers("/api/candy/**").permitAll()
                                 .anyRequest().authenticated()
 
@@ -88,6 +95,11 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public JWTAuthenticationFilter jwtAuthenticationFilter() {
+        return new JWTAuthenticationFilter();
     }
 
 }

@@ -2,6 +2,7 @@ package com.candyShop.rest.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -30,25 +31,30 @@ import java.util.Arrays;
 @EnableWebMvc
 public class SecurityConfig {
     @Bean
+    @Order(1)
     public SecurityFilterChain securedSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .securityMatcher("/api/client")
+                .securityMatcher("/api/auth/register/moderator")
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/api/client").authenticated()
-                                .requestMatchers("/api/auth/register/moderator").authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                                .anyRequest().authenticated())
+                                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
     }
 
 
     @Bean
+    @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize ->
                         authorize
+                                .requestMatchers("/").permitAll()
                                 .requestMatchers("/api/auth/login").permitAll()
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/error").permitAll()

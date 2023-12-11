@@ -113,7 +113,7 @@ public class AuthController {
 
         userService.create(user);
 
-        return new ResponseEntity<>("Moderator registered success!", HttpStatus.OK);
+        return new ResponseEntity<>("Admin registered success!", HttpStatus.OK);
     }
 
 }

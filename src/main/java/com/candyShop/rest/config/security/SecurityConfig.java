@@ -36,7 +36,6 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/client")
-                .securityMatcher("/api/auth/register/moderator")
                 .authorizeHttpRequests(auth ->
                         auth
                                 .anyRequest().authenticated())
@@ -61,6 +60,8 @@ public class SecurityConfig {
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
                                 .requestMatchers("/api/candy/**").permitAll()
+                                .requestMatchers("/api/auth/register/moderator").hasAnyAuthority("ADMIN")
+                                .requestMatchers("/api/auth/register/admin").hasAnyAuthority("ADMIN")
                                 .anyRequest().authenticated()
 
                 );

@@ -16,10 +16,6 @@ public class OrderCandy {
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
     private Integer quantity;
-    @Column(name = "candy_price")
-    @NotNull(message = "Must not null")
-    @NotBlank(message = "Must not blank")
-    private Integer candyPrice;
     @ManyToOne
     @JoinColumn(name = "candy_id")
     private Candy candy;
@@ -30,9 +26,8 @@ public class OrderCandy {
     public OrderCandy() {
     }
 
-    public OrderCandy(Integer quantity, Integer candyPrice) {
+    public OrderCandy(Integer quantity) {
         this.quantity = quantity;
-        this.candyPrice = candyPrice;
     }
 
     public Integer getId() {
@@ -49,14 +44,6 @@ public class OrderCandy {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Integer getCandyPrice() {
-        return candyPrice;
-    }
-
-    public void setCandyPrice(Integer candyPrice) {
-        this.candyPrice = candyPrice;
     }
 
     public Candy getCandy() {

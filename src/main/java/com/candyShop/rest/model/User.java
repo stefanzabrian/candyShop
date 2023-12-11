@@ -30,6 +30,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
     public User() {
     }
 
@@ -70,4 +74,11 @@ public class User {
         this.password = password;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 }

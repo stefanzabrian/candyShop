@@ -1,10 +1,14 @@
 package com.candyShop.rest.service;
 
 import com.candyShop.rest.controller.exception.ResourceNotFoundException;
+import com.candyShop.rest.model.Client;
 import com.candyShop.rest.model.Order;
+import com.candyShop.rest.model.User;
 import com.candyShop.rest.model.constant.OrderStatus;
 import com.candyShop.rest.repository.OrderRepository;
+import com.candyShop.rest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,36 +18,35 @@ import java.util.Optional;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public Optional<Order> findById(Integer id) throws ResourceNotFoundException {
-        return orderRepository.findById(id);
+    public List<Order> getAllByClient(String email) throws IllegalArgumentException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Client clientProfile = user.getClient();
+        if (clientProfile == null) {
+            throw new IllegalArgumentException("user has not client profile yet");
+        }
+        List<Order> clientOrders = orderRepository.findAllByClient(clientProfile);
+        if (clientOrders == null) {
+            throw new IllegalArgumentException("user has no orders yet");
+        } else {
+            return clientOrders;
+        }
 
     }
 
     @Override
-    public Order create(Integer number, Date dateOfOrder, OrderStatus orderStatus, Integer totalPrice) {
-        if (number == null || dateOfOrder == null || orderStatus == null || totalPrice == null) {
-            throw new IllegalArgumentException("number, date of order, order status and total price must not null");
-        }
+    public Optional<Order> findByIdAndClient(Integer id, Client client) {
+        return orderRepository.findByIdAAndClient(id, client);
 
-        Order order = new Order(
-                number,
-                dateOfOrder,
-                orderStatus,
-                totalPrice
-        );
-
-        try {
-            return orderRepository.save(order);
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating the order");
-        }
     }
 
     @Override
@@ -52,32 +55,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<Order> findByClientId(Integer id) {
-        return orderRepository.findByClientId(id);
+    public Optional<Order> findById(Integer id) {
+        return orderRepository.findById(id);
     }
 
-    @Override
-    public Order update(
-            Integer id,
-            Integer number,
-            Date dateOfOrder,
-            OrderStatus orderStatus,
-            Integer totalPrice
-    ) throws ResourceNotFoundException {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found id: " + id));
 
-        if (number == null || dateOfOrder == null || orderStatus == null || totalPrice == null) {
+    @Override
+    public void update(Order order
+    ) throws ResourceNotFoundException {
+        Order orderToBeUpdated = orderRepository.findById(order.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found id: " + order.getId()));
+
+        if (
+                order.getNumber() == null ||
+                        order.getDateOfOrder() == null ||
+                        order.getOrderStatus() == null ||
+                        order.getTotalPrice() == null
+        ) {
             throw new IllegalArgumentException("number, date of order, order status and total price must not null");
         }
 
-        order.setId(id);
-        order.setNumber(number);
-        order.setDateOfOrder(dateOfOrder);
-        order.setOrderStatus(orderStatus);
-        order.setTotalPrice(totalPrice);
+        orderToBeUpdated.setId(order.getId());
+        orderToBeUpdated.setNumber(order.getNumber());
+        orderToBeUpdated.setDateOfOrder(order.getDateOfOrder());
+        orderToBeUpdated.setOrderStatus(order.getOrderStatus());
+        orderToBeUpdated.setTotalPrice(order.getTotalPrice());
         try {
-            return orderRepository.save(order);
+            orderRepository.save(orderToBeUpdated);
         } catch (Exception e) {
             throw new RuntimeException("Error updating the order");
         }
@@ -89,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found id: " + id));
         try {
             orderRepository.deleteById(id);
-        } catch (Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("Error deleting the order");
         }
     }

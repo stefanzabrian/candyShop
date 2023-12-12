@@ -3,6 +3,7 @@ package com.candyShop.rest.service;
 import com.candyShop.rest.model.Candy;
 import com.candyShop.rest.repository.OrderCandyRepository;
 import com.candyShop.rest.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final OrderCandyRepository orderCandyRepository;
     private final OrderRepository orderRepository;
 
+    @Autowired
     public ShoppingCartServiceImpl(UserService userService, OrderCandyRepository orderCandyRepository, OrderRepository orderRepository) {
         this.userService = userService;
         this.orderCandyRepository = orderCandyRepository;
@@ -56,8 +58,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public double totalPrice() {
         double totalPrice = 0;
-        for (Map.Entry<Candy,Integer> entry : cart.entrySet()) {
-            if (entry.getKey().getPrice() == null)  {
+        for (Map.Entry<Candy, Integer> entry : cart.entrySet()) {
+            if (entry.getKey().getPrice() == null) {
                 totalPrice += entry.getValue() * entry.getKey().getPrice();
             }
         }

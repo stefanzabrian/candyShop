@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -70,6 +71,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public Map<Candy, Integer> getAllCandies() {
-        return null;
+        return Collections.unmodifiableMap(cart);
     }
 }

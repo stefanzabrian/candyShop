@@ -54,7 +54,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public double totalPrice() {
-        return 0;
+        double totalPrice = 0;
+        for (Map.Entry<Candy,Integer> entry : cart.entrySet()) {
+            if (entry.getKey().getPrice() == null)  {
+                totalPrice += entry.getValue() * entry.getKey().getPrice();
+            }
+        }
+        return totalPrice;
     }
 
     @Override

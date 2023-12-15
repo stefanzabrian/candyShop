@@ -1,6 +1,7 @@
 package com.candyShop.rest.service;
 
-import com.candyShop.rest.model.Candy;
+import com.candyShop.rest.model.*;
+import com.candyShop.rest.model.constant.OrderStatus;
 import com.candyShop.rest.repository.OrderCandyRepository;
 import com.candyShop.rest.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.mail.MessagingException;
+import java.util.*;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -21,12 +21,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final UserService userService;
     private final OrderCandyRepository orderCandyRepository;
     private final OrderRepository orderRepository;
+    private final MailService mailService;
 
     @Autowired
-    public ShoppingCartServiceImpl(UserService userService, OrderCandyRepository orderCandyRepository, OrderRepository orderRepository) {
+    public ShoppingCartServiceImpl(UserService userService, OrderCandyRepository orderCandyRepository, OrderRepository orderRepository, MailService mailService) {
         this.userService = userService;
         this.orderCandyRepository = orderCandyRepository;
         this.orderRepository = orderRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -68,6 +70,40 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void checkOut(String userEmail) {
+        User user = userService.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with email" + userEmail));
+        Client client = user.getClient();
+        if (client == null) {
+            throw new IllegalArgumentException("User Client profile does not exists");
+        }
+
+        Order newOrder = new Order();
+        newOrder.setNumber(ORDER_PREFIX + new Random().nextInt(1000000000));
+        newOrder.setDateOfOrder(new Date());
+        newOrder.setOrderStatus(OrderStatus.PLACED);
+        newOrder.setTotalPrice(totalPrice());
+        newOrder.setClient(client);
+        orderRepository.save(newOrder);
+
+        for (Map.Entry<Candy,Integer> entry : getAllCandies().entrySet()) {
+            OrderCandy orderCandy = new OrderCandy();
+            orderCandy.setOrder(newOrder);
+            orderCandy.setCandy(entry.getKey());
+            orderCandy.setQuantity(entry.getValue());
+            orderCandyRepository.save(orderCandy);
+        }
+
+        try {
+            mailService.sendEmail(
+                    "candy-shop@gmail.com",
+                    userEmail,
+                    "New Candy Order",
+                    "New Candy Order with total amount : " + totalPrice()
+            );
+        } catch (MessagingException e ) {
+            e.printStackTrace();
+        }
+        cart.clear();
 
     }
 

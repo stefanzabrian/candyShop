@@ -18,7 +18,7 @@ public class Order {
     @Column(name = "number")
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
-    private Integer number;
+    private String number;
     @Column(name = "date_of_order")
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
@@ -28,7 +28,7 @@ public class Order {
     @Column(name = "total_price")
     @NotNull(message = "Must not null")
     @NotBlank(message = "Must not blank")
-    private Integer totalPrice;
+    private Double totalPrice;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -40,7 +40,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Integer number, Date dateOfOrder, OrderStatus orderStatus, Integer totalPrice) {
+    public Order(String number, Date dateOfOrder, OrderStatus orderStatus, Double totalPrice) {
         this.number = number;
         this.dateOfOrder = dateOfOrder;
         this.orderStatus = orderStatus;
@@ -55,11 +55,11 @@ public class Order {
         this.id = id;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -79,11 +79,11 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    public Integer getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

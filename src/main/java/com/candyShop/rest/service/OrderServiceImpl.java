@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Optional<Order> findByIdAndClient(Integer id, Client client) {
-        return orderRepository.findByIdAAndClient(id, client);
+        return orderRepository.findByIdAndClient(id, client);
 
     }
 
@@ -59,33 +59,6 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id);
     }
 
-
-    @Override
-    public void update(Order order
-    ) throws ResourceNotFoundException {
-        Order orderToBeUpdated = orderRepository.findById(order.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found id: " + order.getId()));
-
-        if (
-                order.getNumber() == null ||
-                        order.getDateOfOrder() == null ||
-                        order.getOrderStatus() == null ||
-                        order.getTotalPrice() == null
-        ) {
-            throw new IllegalArgumentException("number, date of order, order status and total price must not null");
-        }
-
-        orderToBeUpdated.setId(order.getId());
-        orderToBeUpdated.setNumber(order.getNumber());
-        orderToBeUpdated.setDateOfOrder(order.getDateOfOrder());
-        orderToBeUpdated.setOrderStatus(order.getOrderStatus());
-        orderToBeUpdated.setTotalPrice(order.getTotalPrice());
-        try {
-            orderRepository.save(orderToBeUpdated);
-        } catch (Exception e) {
-            throw new RuntimeException("Error updating the order");
-        }
-    }
 
     @Override
     public void delete(int id) throws ResourceNotFoundException {

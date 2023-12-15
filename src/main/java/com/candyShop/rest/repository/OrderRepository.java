@@ -12,5 +12,5 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
     List<Order> findAllByClient(Client client);
     Optional<Order> findByClientId(Integer id);
     Optional<Order> findById(Integer id);
-    Optional<Order> findByIdAAndClient(Integer id, Client client);
+    Optional<Order> findByIdAndClient(Integer id, Client client);
 }

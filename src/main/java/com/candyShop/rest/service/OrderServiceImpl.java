@@ -4,14 +4,11 @@ import com.candyShop.rest.controller.exception.ResourceNotFoundException;
 import com.candyShop.rest.model.Client;
 import com.candyShop.rest.model.Order;
 import com.candyShop.rest.model.User;
-import com.candyShop.rest.model.constant.OrderStatus;
 import com.candyShop.rest.repository.OrderRepository;
 import com.candyShop.rest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

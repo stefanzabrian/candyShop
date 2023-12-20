@@ -18,12 +18,11 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
-    private final UserService userService;
 
     @Autowired
-    public OrderController(OrderService orderService, UserService userService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.userService = userService;
+        
     }
 
     @GetMapping("/order/client-orders")
